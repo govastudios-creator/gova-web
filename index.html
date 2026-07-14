@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GOVA MEDIA — Producción audiovisual que hace crecer tu negocio</title>
+<meta name="description" content="GOVA MEDIA: productora audiovisual en República Dominicana. Cobertura de eventos, video inmobiliario y contenido para redes que vende." />
+
+<!-- Favicon: isotipo GOVA (g negra + punto naranja) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='72' font-family='Arial,Helvetica,sans-serif' font-size='80' font-weight='700' text-anchor='middle' fill='%23111'%3Eg%3C/text%3E%3Ccircle cx='74' cy='34' r='9' fill='%23FF6A00'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Ctext x='50' y='72' font-family='Arial,Helvetica,sans-serif' font-size='80' font-weight='700' text-anchor='middle' fill='%23111'%3Eg%3C/text%3E%3Ccircle cx='74' cy='34' r='9' fill='%23FF6A00'/%3E%3C/svg%3E" />
+
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-soft:#111111;
+    --card:#161616;
+    --line:#242424;
+    --text:#f4f4f4;
+    --muted:#a3a3a3;
+    --orange:#ff6a00;
+    --orange-soft:rgba(255,106,0,.12);
+    --white:#ffffff;
+    --radius:16px;
+    --maxw:1140px;
+    --font:'Helvetica Neue',Arial,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .accent{color:var(--orange)}
+  section{padding:96px 0}
+
+  /* ---------- Botones ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:15px 28px;border-radius:100px;font-weight:700;font-size:16px;
+    transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+    cursor:pointer;border:none;
+  }
+  .btn-primary{background:var(--orange);color:#111}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,106,0,.35)}
+  .btn-ghost{background:transparent;color:var(--white);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(10,10,10,.7);backdrop-filter:blur(12px);
+    border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
+  }
+  header.nav.scrolled{border-color:var(--line);background:rgba(10,10,10,.9)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:0;font-weight:800;font-size:24px;letter-spacing:.5px}
+  .logo .g{position:relative;color:#fff}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);display:inline-block;margin-left:2px;margin-bottom:14px}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{color:var(--muted);font-size:15px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--white)}
+  .nav-cta{display:inline-flex}
+  .menu-btn{display:none;background:none;border:none;color:#fff;font-size:26px;cursor:pointer}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    padding-top:72px;overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(circle at 75% 30%, rgba(255,106,0,.16), transparent 45%),
+      linear-gradient(180deg,#0d0d0d 0%,#070707 100%);
+  }
+  /* Reemplaza este bloque por tu video: pon un <video> con tu reel */
+  .hero-bg::after{
+    content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.85)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='none'/%3E%3Cpath d='M0 59.5H60M59.5 0V60' stroke='%23ffffff' stroke-opacity='0.04'/%3E%3C/svg%3E");
+  }
+  .hero-video{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .hero-video iframe{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:100vw;height:56.25vw;min-height:100vh;min-width:177.78vh;
+    border:0;filter:saturate(1.05) contrast(1.03);
+  }
+  .hero-overlay{
+    position:absolute;inset:0;z-index:1;
+    background:
+      linear-gradient(180deg,rgba(8,8,8,.55) 0%,rgba(7,7,7,.72) 55%,rgba(6,6,6,.94) 100%),
+      radial-gradient(circle at 78% 28%, rgba(255,106,0,.14), transparent 46%);
+  }
+  .hero-content{position:relative;z-index:2;max-width:760px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--orange-soft);color:var(--orange);
+    padding:8px 16px;border-radius:100px;font-size:13px;font-weight:700;
+    letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px;
+  }
+  .hero h1{
+    font-size:clamp(38px,6vw,68px);line-height:1.05;font-weight:800;
+    letter-spacing:-1.5px;margin-bottom:24px;
+  }
+  .hero h1 span{color:var(--orange)}
+  .hero p.lead{font-size:clamp(17px,2.2vw,21px);color:var(--muted);max-width:600px;margin-bottom:40px}
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:48px;margin-top:64px;flex-wrap:wrap}
+  .stat .num{font-size:34px;font-weight:800;color:#fff}
+  .stat .num span{color:var(--orange)}
+  .stat .label{font-size:14px;color:var(--muted)}
+
+  /* ---------- Section headings ---------- */
+  .sec-head{max-width:640px;margin-bottom:56px}
+  .sec-tag{color:var(--orange);font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase}
+  .sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-1px;margin:14px 0 16px}
+  .sec-head p{color:var(--muted);font-size:18px}
+
+  /* ---------- Servicios ---------- */
+  .grid{display:grid;gap:20px}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .service{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 30px;transition:transform .25s ease,border-color .25s ease;
+  }
+  .service:hover{transform:translateY(-6px);border-color:var(--orange)}
+  .service .ico{
+    width:54px;height:54px;border-radius:14px;background:var(--orange-soft);
+    display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:22px;
+  }
+  .service h3{font-size:21px;margin-bottom:10px}
+  .service p{color:var(--muted);font-size:15px}
+  .service .badge{
+    display:inline-block;margin-top:16px;font-size:12px;font-weight:700;
+    color:var(--orange);background:var(--orange-soft);padding:5px 12px;border-radius:100px;
+  }
+
+  /* ---------- Proceso ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .step{position:relative;padding-top:24px}
+  .step .n{
+    font-size:15px;font-weight:800;color:#111;background:var(--orange);
+    width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  }
+  .step h4{font-size:18px;margin-bottom:8px}
+  .step p{color:var(--muted);font-size:14px}
+
+  /* ---------- Portafolio ---------- */
+  .portfolio{background:var(--bg-soft)}
+  .pf-row{display:grid;gap:18px;margin-bottom:18px}
+  .pf-land{grid-template-columns:1fr 1fr}
+  .pf-short{grid-template-columns:repeat(3,1fr);max-width:760px}
+  .pf-card{
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+    background:#000;transition:transform .25s ease,border-color .25s ease;
+  }
+  .pf-card:hover{transform:translateY(-5px);border-color:var(--orange)}
+  .pf-video{position:relative;width:100%;background:#000}
+  .pf-land .pf-video{aspect-ratio:16/9}
+  .pf-short .pf-video{aspect-ratio:9/16}
+  .pf-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .pf-cap{display:flex;align-items:center;gap:10px;padding:14px 18px}
+  .pf-cap .cat{color:var(--orange);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px}
+  .pf-cap h4{font-size:15px;color:#fff;font-weight:600}
+  .pf-cap .dotsep{width:4px;height:4px;border-radius:50%;background:var(--muted)}
+
+  /* ---------- Planes ---------- */
+  .plans{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:900px;margin:0 auto}
+  .plan{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:38px 34px;position:relative;
+  }
+  .plan.featured{border-color:var(--orange);box-shadow:0 20px 60px rgba(255,106,0,.12)}
+  .plan .tag{
+    position:absolute;top:-13px;right:28px;background:var(--orange);color:#111;
+    font-size:12px;font-weight:800;padding:6px 14px;border-radius:100px;letter-spacing:.5px;
+  }
+  .plan h3{font-size:24px;margin-bottom:6px}
+  .plan .desc{color:var(--muted);font-size:15px;margin-bottom:24px}
+  .plan ul{list-style:none;margin-bottom:30px}
+  .plan li{padding:10px 0;border-bottom:1px solid var(--line);font-size:15px;display:flex;gap:12px;align-items:flex-start}
+  .plan li:last-child{border-bottom:none}
+  .plan li::before{content:"✓";color:var(--orange);font-weight:800}
+  .plan .btn{width:100%;justify-content:center}
+
+  /* ---------- CTA / Contacto ---------- */
+  .contact{
+    background:linear-gradient(135deg,#181818,#0c0c0c);
+    border:1px solid var(--line);border-radius:24px;padding:64px 48px;text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .contact::before{
+    content:"";position:absolute;top:-60px;right:-60px;width:280px;height:280px;
+    background:radial-gradient(circle,var(--orange-soft),transparent 70%);
+  }
+  .contact h2{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;position:relative}
+  .contact p{color:var(--muted);font-size:18px;max-width:520px;margin:0 auto 36px;position:relative}
+  .contact-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}
+  .contact .email{margin-top:26px;color:var(--muted);font-size:15px;position:relative}
+  .contact .email a{color:var(--orange);font-weight:600}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0}
+  .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  .foot-inner .muted{color:var(--muted);font-size:14px}
+
+  /* ---------- WhatsApp flotante ---------- */
+  .wa-float{
+    position:fixed;bottom:24px;right:24px;z-index:60;
+    width:60px;height:60px;border-radius:50%;background:#25D366;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(37,211,102,.4);transition:transform .2s;
+  }
+  .wa-float:hover{transform:scale(1.08)}
+  .wa-float svg{width:32px;height:32px;fill:#fff}
+
+  /* ---------- Reveal animación ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:900px){
+    .grid-3,.steps{grid-template-columns:repeat(2,1fr)}
+    .pf-land{grid-template-columns:1fr}
+    .plans{grid-template-columns:1fr}
+  }
+  @media(max-width:680px){
+    section{padding:72px 0}
+    .nav-links{
+      position:fixed;top:72px;left:0;right:0;background:#0c0c0c;
+      flex-direction:column;align-items:flex-start;padding:24px;gap:18px;
+      border-bottom:1px solid var(--line);transform:translateY(-140%);transition:transform .3s;
+    }
+    .nav-links.open{transform:none}
+    .nav-cta{display:none}
+    .menu-btn{display:block}
+    .grid-3,.steps{grid-template-columns:1fr}
+    .hero-stats{gap:28px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="logo"><span class="g">gova</span><span class="dot"></span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Cómo trabajamos</a>
+      <a href="#portafolio">Portafolio</a>
+      <a href="#planes">Planes</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a href="#contacto" class="btn btn-primary nav-cta">Cotizar mi proyecto</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menú">☰</button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-video">
+    <iframe src="https://www.youtube-nocookie.com/embed/74cfaxCyPzc?autoplay=1&mute=1&controls=0&loop=1&playlist=74cfaxCyPzc&modestbranding=1&showinfo=0&rel=0&playsinline=1&disablekb=1&fs=0&iv_load_policy=3"
+      title="GOVA reel" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="wrap hero-content">
+    <span class="eyebrow"><span class="dot" style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Productora audiovisual · República Dominicana</span>
+    <h1>Hacemos que tu negocio se vea <span>como se merece.</span></h1>
+    <p class="lead">Video para eventos, inmobiliaria y redes sociales. Contenido que no solo se ve bien — atrae clientes y hace crecer tu marca.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn btn-primary">Cotizar mi proyecto →</a>
+      <a href="#portafolio" class="btn btn-ghost">Ver nuestro trabajo</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">Cine<span>matográfico</span></div><div class="label">Estética de cine en cada toma</div></div>
+      <div class="stat"><div class="num">Same<span>-day</span></div><div class="label">Entrega express en eventos</div></div>
+      <div class="stat"><div class="num">Full<span> service</span></div><div class="label">Idea, producción y edición</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICIOS ============ -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Servicios</span>
+      <h2>Lo que hacemos por ti</h2>
+      <p>Producción audiovisual pensada para negocios que quieren destacar y vender más.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="service reveal">
+        <div class="ico">🎬</div>
+        <h3>Cobertura de eventos</h3>
+        <p>Capturamos tu evento completo con calidad profesional. Fotos y video listos rápido para que compartas en el momento.</p>
+        <span class="badge">Entrega same-day disponible</span>
+      </div>
+      <div class="service reveal">
+        <div class="ico">🏠</div>
+        <h3>Video inmobiliario</h3>
+        <p>Recorridos y tours que hacen que una propiedad se venda sola. Perfecto para agentes y desarrolladoras.</p>
+        <span class="badge">Tours y recorridos</span>
+      </div>
+      <div class="service reveal">
+        <div class="ico">📱</div>
+        <h3>Contenido para redes</h3>
+        <p>Reels, tiktoks y contenido para tu comercio o marca. Constante, atractivo y hecho para captar clientes.</p>
+        <span class="badge">Planes mensuales</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESO ============ -->
+<section id="proceso" style="background:var(--bg-soft)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Cómo trabajamos</span>
+      <h2>Simple, claro y sin complicaciones</h2>
+      <p>No necesitas saber de video. Nosotros nos encargamos de todo.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h4>Conversamos</h4><p>Nos cuentas tu negocio y qué quieres lograr. Escuchamos tu idea.</p></div>
+      <div class="step reveal"><div class="n">2</div><h4>Propuesta</h4><p>Te presentamos la idea creativa y la cotización clara, sin sorpresas.</p></div>
+      <div class="step reveal"><div class="n">3</div><h4>Producción</h4><p>Grabamos con equipo profesional. Tú solo apareces y disfrutas.</p></div>
+      <div class="step reveal"><div class="n">4</div><h4>Entrega</h4><p>Recibes tu material listo para publicar y empezar a atraer clientes.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTAFOLIO ============ -->
+<section id="portafolio" class="portfolio">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Portafolio</span>
+      <h2>Nuestro trabajo habla por nosotros</h2>
+      <p>Una muestra de nuestros proyectos. Dale play.</p>
+    </div>
+    <div class="pf-row pf-land">
+      <div class="pf-card reveal">
+        <div class="pf-video"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/74cfaxCyPzc?rel=0&modestbranding=1" title="Proyecto GOVA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="pf-cap"><span class="cat">Producción</span><span class="dotsep"></span><h4>Proyecto destacado</h4></div>
+      </div>
+      <div class="pf-card reveal">
+        <div class="pf-video"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/1J2p3gsoGq4?rel=0&modestbranding=1" title="Proyecto GOVA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="pf-cap"><span class="cat">Producción</span><span class="dotsep"></span><h4>Proyecto destacado</h4></div>
+      </div>
+    </div>
+    <div class="pf-row pf-short">
+      <div class="pf-card reveal">
+        <div class="pf-video"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/aNTzm23XMyc?rel=0&modestbranding=1" title="Short GOVA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="pf-cap"><span class="cat">Redes</span><span class="dotsep"></span><h4>Short</h4></div>
+      </div>
+      <div class="pf-card reveal">
+        <div class="pf-video"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/dPHcLrSrRJA?rel=0&modestbranding=1" title="Short GOVA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="pf-cap"><span class="cat">Redes</span><span class="dotsep"></span><h4>Short</h4></div>
+      </div>
+      <div class="pf-card reveal">
+        <div class="pf-video"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/6tARbBsa7jo?rel=0&modestbranding=1" title="Short GOVA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="pf-cap"><span class="cat">Redes</span><span class="dotsep"></span><h4>Short</h4></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANES ============ -->
+<section id="planes">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin:0 auto 56px;text-align:center">
+      <span class="sec-tag">Planes</span>
+      <h2>Trabajemos como mejor te convenga</h2>
+      <p style="margin:0 auto">Por proyecto puntual o con un plan mensual para mantener tu marca siempre activa.</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>Por proyecto</h3>
+        <p class="desc">Ideal para un evento, un video puntual o un lanzamiento.</p>
+        <ul>
+          <li>Cotización a la medida de tu necesidad</li>
+          <li>Producción profesional completa</li>
+          <li>Entrega lista para publicar</li>
+          <li>50% para reservar, resto al entregar</li>
+        </ul>
+        <a href="#contacto" class="btn btn-ghost">Solicitar cotización</a>
+      </div>
+      <div class="plan featured reveal">
+        <span class="tag">Más popular</span>
+        <h3>Plan mensual</h3>
+        <p class="desc">Contenido constante para tu comercio o marca, cada mes.</p>
+        <ul>
+          <li>Sesiones de grabación recurrentes</li>
+          <li>Reels y contenido para tus redes</li>
+          <li>Prioridad en agenda y entrega</li>
+          <li>Precio preferencial vs. proyectos sueltos</li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary">Quiero mi plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO ============ -->
+<section id="contacto">
+  <div class="wrap">
+    <div class="contact reveal">
+      <h2>¿Listo para que tu negocio brille?</h2>
+      <p>Cuéntanos tu idea. Te respondemos rápido y sin compromiso.</p>
+      <div class="contact-actions">
+        <a href="https://wa.me/18295598194?text=Hola%20GOVA,%20quiero%20cotizar%20un%20proyecto" class="btn btn-primary" target="_blank" rel="noopener">
+          Escríbenos por WhatsApp
+        </a>
+        <a href="mailto:govastudios@gmail.com" class="btn btn-ghost">Enviar correo</a>
+      </div>
+      <div class="email">o escríbenos a <a href="mailto:govastudios@gmail.com">govastudios@gmail.com</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-inner">
+    <a href="#" class="logo" style="font-size:20px"><span class="g">gova</span><span class="dot"></span></a>
+    <div class="muted">© 2026 GOVA MEDIA · Producción audiovisual · República Dominicana</div>
+    <div class="muted">govastudios@gmail.com</div>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/18295598194?text=Hola%20GOVA,%20quiero%20cotizar%20un%20proyecto" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+</a>
+
+<script>
+  // Nav scroll
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>20));
+  // Menú móvil
+  const menuBtn=document.getElementById('menuBtn'),navLinks=document.getElementById('navLinks');
+  menuBtn.addEventListener('click',()=>navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+  // Reveal on scroll
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%4*0.08)+'s';io.observe(el)});
+</script>
+</body>
+</html>
