@@ -329,6 +329,12 @@ h1 .odot{display:inline-block;width:.15em;height:.15em;border-radius:50%;backgro
 </section>
 
 <script>
+// siempre iniciar en el hero (evita que el navegador restaure el scroll o salte por el hash)
+try{history.scrollRestoration='manual';}catch(e){}
+if(location.hash){history.replaceState(null,'',location.pathname+location.search);}
+window.scrollTo(0,0);
+window.addEventListener('load',()=>window.scrollTo(0,0));
+
 // timecode
 const pad=n=>String(n).padStart(2,'0');
 let f=0;
@@ -383,7 +389,7 @@ requestAnimationFrame(drift);
   const box=document.getElementById('herovid');
   if(!box)return;
   const f=document.createElement('iframe');
-  f.src='https://www.youtube.com/embed/1J2p3gsoGq4?autoplay=1&mute=1&loop=1&playlist=1J2p3gsoGq4&controls=0&playsinline=1&modestbranding=1&rel=0';
+  f.src='https://www.youtube.com/embed/1J2p3gsoGq4?autoplay=1&mute=1&loop=1&playlist=1J2p3gsoGq4&controls=0&playsinline=1&modestbranding=1&rel=0&cc_load_policy=0&iv_load_policy=3&disablekb=1&fs=0&vq=hd1080';
   f.allow='autoplay; encrypted-media';
   f.addEventListener('load',()=>{f.style.opacity='1';});
   box.appendChild(f);
@@ -396,7 +402,7 @@ if(btsBox){
     if(e.isIntersecting && !btsBox.dataset.loaded){
       btsBox.dataset.loaded='1';
       const f=document.createElement('iframe');
-      f.src='https://www.youtube.com/embed/74cfaxCyPzc?autoplay=1&mute=1&loop=1&playlist=74cfaxCyPzc&controls=0&playsinline=1&modestbranding=1&rel=0';
+      f.src='https://www.youtube.com/embed/74cfaxCyPzc?autoplay=1&mute=1&loop=1&playlist=74cfaxCyPzc&controls=0&playsinline=1&modestbranding=1&rel=0&cc_load_policy=0&iv_load_policy=3&disablekb=1&fs=0&vq=hd1080';
       f.allow='autoplay; encrypted-media';
       btsBox.appendChild(f);
     }
