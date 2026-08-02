@@ -117,6 +117,13 @@ input.txt:focus{border-color:var(--orange)}
 .btn.ghost:hover{border-color:var(--orange)}
 .btn[disabled]{opacity:.35;pointer-events:none}
 .btnrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn.ghost.nextstars{margin-top:18px}
+/* botón Atrás */
+.backbtn{position:fixed;left:18px;bottom:18px;z-index:67;display:none;align-items:center;gap:6px;
+  background:rgba(13,13,16,.7);border:1px solid var(--edge);color:var(--dim);
+  font-family:var(--body);font-size:13px;letter-spacing:.06em;padding:11px 20px;border-radius:2px;cursor:pointer;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:all .2s}
+.backbtn:hover{border-color:var(--orange);color:var(--ink);transform:translateX(-2px)}
 
 /* thanks screen */
 .check{width:96px;height:96px;margin:0 auto 10px;border-radius:50%;border:3px solid var(--orange);
@@ -141,6 +148,7 @@ input.txt:focus{border-color:var(--orange)}
 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
 <div class="logo-mark logo-badge"></div>
 <div class="confetti" id="confetti"></div>
+<button class="backbtn" id="backbtn">‹ Atrás</button>
 
 <div class="stage" id="stage"></div>
 
@@ -176,16 +184,21 @@ function starGroup(key, onDone){
   const wrap = document.createElement('div');
   const row = document.createElement('div'); row.className='stars';
   const lbl = document.createElement('div'); lbl.className='ratinglabel';
+  const nextBtn = document.createElement('button'); nextBtn.className='btn ghost nextstars';
+  nextBtn.innerHTML='Siguiente &nbsp;→'; nextBtn.style.display='none'; nextBtn.onclick=onDone;
   for(let i=1;i<=5;i++){
     const s=document.createElement('div'); s.className='star'; s.innerHTML=starSVG;
     s.onmouseenter=()=>paint(i);
-    s.onclick=()=>{data[key]=i;paint(i);lbl.textContent=RATING_WORDS[i];lbl.classList.add('show');
-      setTimeout(onDone,650);};
+    s.onclick=()=>{const first=data[key]==null; data[key]=i;paint(i);
+      lbl.textContent=RATING_WORDS[i];lbl.classList.add('show');nextBtn.style.display='inline-flex';
+      if(first) setTimeout(onDone,650);};   // avanza solo al responder por primera vez
     row.appendChild(s);
   }
   row.onmouseleave=()=>paint(data[key]||0);
   function paint(n){[...row.children].forEach((el,idx)=>el.classList.toggle('on',idx<n));}
-  wrap.appendChild(row); wrap.appendChild(lbl);
+  // restaurar si ya había respondido (al volver atrás)
+  if(data[key]){paint(data[key]);lbl.textContent=RATING_WORDS[data[key]];lbl.classList.add('show');nextBtn.style.display='inline-flex';}
+  wrap.appendChild(row); wrap.appendChild(lbl); wrap.appendChild(nextBtn);
   return wrap;
 }
 
@@ -240,6 +253,7 @@ screens.push(()=>{
   el.innerHTML=`<div class="qnum">04</div><h2>¿Qué podemos<br>mejorar?</h2><p class="sub">Cuéntanos con confianza — todo suma (opcional)</p>
     <div class="field"><textarea id="mej" placeholder="Escribe aquí..."></textarea></div>
     <div class="btnrow"><button class="btn solid" id="cont">Continuar &nbsp;→</button></div>`;
+  el.querySelector('#mej').value=data.mejorar||'';
   el.querySelector('#cont').onclick=()=>{data.mejorar=el.querySelector('#mej').value.trim();next();};
   return el;
 });
@@ -263,6 +277,13 @@ screens.push(()=>{
     fin.removeAttribute('disabled');
   });
   fin.onclick=()=>{const t=el.querySelector('#test');if(t)data.testimonio=t.value.trim();submit();};
+  // restaurar si ya había elegido (al volver atrás)
+  if(data.testimonio_ok!==null){
+    const sel=el.querySelector('.chip[data-v="'+(data.testimonio_ok?'1':'0')+'"]'); if(sel)sel.classList.add('sel');
+    tf.style.display=data.testimonio_ok?'block':'none';
+    el.querySelector('#test').value=data.testimonio||'';
+    fin.removeAttribute('disabled');
+  }
   return el;
 });
 
@@ -274,12 +295,17 @@ function thanksScreen(){
     <div class="kicker">Que corte</div>
     <h1 class="wm">¡GRACIAS!</h1>
     <p class="sub">Tu opinión ya nos llegó. Nos ayuda a seguir creciendo y a darte cada vez mejores historias. 🧡</p>
+    <div class="btnrow"><a class="btn solid" href="/">Explorar GOVA &nbsp;→</a></div>
+    <div class="hint">Descubre nuestro trabajo, servicios y más</div>
     <div class="who">— El equipo de <b>GOVA MEDIA</b></div>`;
   return el;
 }
 
 // ---- flow control ----
-let idx=-1;
+let idx=-1, atThanks=false;
+const backBtn=document.getElementById('backbtn');
+backBtn.onclick=()=>prev();
+function updateBack(){ backBtn.style.display=(idx>=1 && !atThanks)?'inline-flex':'none'; }
 function mount(el){
   const old=stage.querySelector('.screen.active');
   if(old){old.classList.add('leaving');old.classList.remove('active');setTimeout(()=>old.remove(),400);}
@@ -291,8 +317,9 @@ function setProgress(){
   const p = idx<=0?0:Math.min(idx/total,1);
   document.getElementById('prog').style.width=(p*100)+'%';
 }
-function next(){ idx++; if(idx<screens.length){ mount(screens[idx]()); setProgress(); } }
-function goThanks(){ document.getElementById('prog').style.width='100%'; mount(thanksScreen()); launchConfetti(); }
+function next(){ idx++; if(idx<screens.length){ mount(screens[idx]()); setProgress(); updateBack(); } }
+function prev(){ if(idx>0){ idx--; mount(screens[idx]()); setProgress(); updateBack(); } }
+function goThanks(){ atThanks=true; updateBack(); document.getElementById('prog').style.width='100%'; mount(thanksScreen()); launchConfetti(); }
 
 // ---- submit ----
 let sent=false;
