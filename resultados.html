@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOVA · Resultados de encuestas</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080a;--ink:#F5F2EC;--dim:#9a968f;--orange:#FF5A1F;--orange2:#ff7a3c;
+  --edge:rgba(245,242,236,.14);--card:#0d0d10;--disp:'Anton',Impact,sans-serif;--body:'Space Grotesk',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh}
+.wrap{max-width:960px;margin:0 auto;padding:30px 22px 80px}
+.top{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--edge);padding-bottom:18px;margin-bottom:26px}
+.brand{font-family:var(--disp);font-size:30px;letter-spacing:.06em;text-transform:uppercase}
+.brand span{color:var(--orange)}
+.kick{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+button.logout{background:none;border:1px solid var(--edge);color:var(--dim);padding:8px 16px;border-radius:2px;cursor:pointer;font-family:var(--body);font-size:12px;letter-spacing:.1em}
+button.logout:hover{border-color:var(--orange);color:var(--ink)}
+
+/* login */
+.gate{max-width:360px;margin:14vh auto 0;text-align:center}
+.gate h1{font-family:var(--disp);font-size:44px;text-transform:uppercase;letter-spacing:.04em}
+.gate h1 span{color:var(--orange)}
+.gate p{color:var(--dim);font-size:13px;letter-spacing:.05em;margin:8px 0 26px}
+.gate input{width:100%;background:var(--card);border:1px solid var(--edge);color:var(--ink);font-family:var(--body);
+  font-size:15px;padding:14px 16px;border-radius:2px;outline:none;margin-bottom:12px;text-align:center}
+.gate input:focus{border-color:var(--orange)}
+.gate button{width:100%;background:var(--orange);color:#0a0a0a;border:none;font-family:var(--body);font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;padding:15px;border-radius:2px;cursor:pointer;margin-top:6px}
+.err{color:#ff6a5a;font-size:13px;min-height:18px;margin-top:10px}
+
+/* summary tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:30px}
+.tile{background:var(--card);border:1px solid var(--edge);border-radius:3px;padding:18px}
+.tile .lab{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.tile .big{font-family:var(--disp);font-size:38px;line-height:1;color:var(--ink)}
+.tile .big small{font-size:16px;color:var(--dim)}
+.tile .st{color:var(--orange);font-size:16px;margin-top:6px;letter-spacing:2px}
+
+/* responses */
+.sechead{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin:8px 0 16px;display:flex;align-items:center;gap:12px}
+.sechead::after{content:"";flex:1;height:1px;background:var(--edge)}
+.resp{background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--orange);border-radius:3px;padding:18px 20px;margin-bottom:14px}
+.resp .rtop{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;align-items:baseline;margin-bottom:10px}
+.resp .name{font-weight:600;font-size:16px}
+.resp .proj{color:var(--dim);font-size:12px;letter-spacing:.06em}
+.resp .date{color:var(--dim);font-size:11px;letter-spacing:.08em}
+.rrow{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--dim);margin-bottom:8px}
+.rrow b{color:var(--orange);font-weight:600}
+.quote{color:#d8d4cc;font-size:14px;line-height:1.5;margin-top:8px;padding-left:12px;border-left:2px solid var(--edge)}
+.badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);border:1px solid var(--orange);border-radius:20px;padding:2px 10px;margin-top:8px}
+.empty{text-align:center;color:var(--dim);padding:50px 0}
+.muted{color:var(--dim)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const CONFIG = {
+  SUPABASE_URL: "https://yeaufthgmcjdfckfdjou.supabase.co",
+  SUPABASE_KEY: "sb_publishable_LO1rC1BS4j8olV2wBnsOhA_swkxL-MD"
+};
+const app = document.getElementById('app');
+let token = null;
+
+function renderLogin(msg){
+  app.innerHTML = `<div class="gate">
+    <h1>GO<span>VA</span></h1>
+    <p>Panel privado de encuestas</p>
+    <input id="email" type="email" placeholder="Correo" autocomplete="username">
+    <input id="pass" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button id="in">Entrar</button>
+    <div class="err">${msg||''}</div>
+  </div>`;
+  const go=()=>login(document.getElementById('email').value.trim(),document.getElementById('pass').value);
+  document.getElementById('in').onclick=go;
+  document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+}
+
+async function login(email,pass){
+  if(!email||!pass){renderLogin('Escribe tu correo y contraseña.');return;}
+  document.querySelector('.err').textContent='Entrando...';
+  try{
+    const r=await fetch(CONFIG.SUPABASE_URL+'/auth/v1/token?grant_type=password',{
+      method:'POST',headers:{'Content-Type':'application/json','apikey':CONFIG.SUPABASE_KEY},
+      body:JSON.stringify({email,password:pass})});
+    const j=await r.json();
+    if(!r.ok||!j.access_token){renderLogin(j.error_description||j.msg||'Correo o contraseña incorrectos.');return;}
+    token=j.access_token; loadData();
+  }catch(e){renderLogin('No se pudo conectar. Revisa tu internet.');}
+}
+
+async function loadData(){
+  app.innerHTML='<div class="wrap"><p class="muted" style="padding:40px 0;text-align:center">Cargando respuestas...</p></div>';
+  try{
+    const r=await fetch(CONFIG.SUPABASE_URL+'/rest/v1/encuestas?select=*&order=created_at.desc',{
+      headers:{'apikey':CONFIG.SUPABASE_KEY,'Authorization':'Bearer '+token}});
+    if(!r.ok){renderLogin('Sesión no válida. Vuelve a entrar.');return;}
+    const rows=await r.json(); renderDash(rows);
+  }catch(e){renderLogin('No se pudieron cargar las respuestas.');}
+}
+
+function avg(rows,key){const v=rows.map(r=>r[key]).filter(x=>x!=null);return v.length?(v.reduce((a,b)=>a+b,0)/v.length):null;}
+function starStr(n){if(n==null)return '—';const f=Math.round(n);return '★'.repeat(f)+'☆'.repeat(5-f);}
+function esc(s){return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function fdate(s){try{return new Date(s).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return '';}}
+
+function renderDash(rows){
+  const gg=avg(rows,'rating_general'),cc=avg(rows,'rating_calidad'),ss=avg(rows,'rating_servicio');
+  const tiles=`<div class="tiles">
+    <div class="tile"><div class="lab">Respuestas</div><div class="big">${rows.length}</div></div>
+    <div class="tile"><div class="lab">General</div><div class="big">${gg?gg.toFixed(1):'—'}<small>/5</small></div><div class="st">${starStr(gg)}</div></div>
+    <div class="tile"><div class="lab">Calidad</div><div class="big">${cc?cc.toFixed(1):'—'}<small>/5</small></div><div class="st">${starStr(cc)}</div></div>
+    <div class="tile"><div class="lab">Servicio</div><div class="big">${ss?ss.toFixed(1):'—'}<small>/5</small></div><div class="st">${starStr(ss)}</div></div>
+  </div>`;
+
+  const list = rows.length ? rows.map(r=>`
+    <div class="resp">
+      <div class="rtop">
+        <div><span class="name">${esc(r.cliente)||'Anónimo'}</span> ${r.proyecto?`<span class="proj">· ${esc(r.proyecto)}</span>`:''}</div>
+        <span class="date">${fdate(r.created_at)}</span>
+      </div>
+      <div class="rrow">
+        <span>General <b>${starStr(r.rating_general)}</b></span>
+        <span>Calidad <b>${starStr(r.rating_calidad)}</b></span>
+        <span>Servicio <b>${starStr(r.rating_servicio)}</b></span>
+      </div>
+      ${r.mejorar?`<div class="quote"><span class="muted">Mejorar:</span> ${esc(r.mejorar)}</div>`:''}
+      ${r.testimonio?`<div class="quote">"${esc(r.testimonio)}"</div>`:''}
+      ${r.testimonio_ok?'<span class="badge">✓ Autoriza testimonio</span>':''}
+    </div>`).join('') : '<div class="empty">Todavía no hay respuestas. Comparte el link de la encuesta con tus clientes. 🎬</div>';
+
+  app.innerHTML=`<div class="wrap">
+    <div class="top">
+      <div><div class="kick">Panel privado</div><div class="brand">GO<span>VA</span> · Encuestas</div></div>
+      <button class="logout" id="out">Salir</button>
+    </div>
+    ${tiles}
+    <div class="sechead">Respuestas</div>
+    ${list}
+  </div>`;
+  document.getElementById('out').onclick=()=>{token=null;renderLogin();};
+}
+
+renderLogin();
+</script>
+</body>
+</html>
