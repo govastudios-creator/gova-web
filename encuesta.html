@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>GOVA · Encuesta</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="referrer" content="no-referrer">
+<meta name="referrer" content="origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -157,7 +157,7 @@ input.txt:focus{border-color:var(--orange)}
 const CONFIG = {
   SUPABASE_URL: "https://yeaufthgmcjdfckfdjou.supabase.co",
   SUPABASE_KEY: "sb_publishable_LO1rC1BS4j8olV2wBnsOhA_swkxL-MD",
-  NOTIFY_EMAIL: "govastudios@gmail.com" // notificación por correo (FormSubmit, sin cuenta)
+  FORMSUBMIT: "e9c316945487f0ea87fd16455a4a1471" // notificación por correo (FormSubmit activado; el código apunta al correo, sin exponerlo)
 };
 /* ================================================== */
 
@@ -340,10 +340,10 @@ function submit(){
     body:JSON.stringify(payload)
   }).catch(e=>console.warn('supabase',e));
   // 2) notificación por correo (FormSubmit — sin cuenta)
-  if(CONFIG.NOTIFY_EMAIL){
+  if(CONFIG.FORMSUBMIT){
     const prom=[data.rating_general,data.rating_calidad,data.rating_servicio].filter(x=>x!=null);
     const avg=prom.length?(prom.reduce((a,b)=>a+b,0)/prom.length).toFixed(1):'—';
-    fetch('https://formsubmit.co/ajax/'+encodeURIComponent(CONFIG.NOTIFY_EMAIL),{
+    fetch('https://formsubmit.co/ajax/'+CONFIG.FORMSUBMIT,{
       method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({
         _subject:`⭐ Nueva encuesta GOVA — ${payload.cliente} (${avg}/5)`,
