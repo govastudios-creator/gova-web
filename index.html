@@ -191,10 +191,19 @@ h1 .odot{display:inline-block;width:.15em;height:.15em;border-radius:50%;backgro
 .proj-rate{text-align:right;line-height:1.1}
 .proj-stars{font-size:clamp(20px,3.4vw,30px);letter-spacing:3px;color:var(--orange);white-space:nowrap}
 .proj-score{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:8px}
-.proj-vids{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:720px){.proj-vids{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.proj-vids{grid-template-columns:1fr}}
+.proj-vids{display:grid;grid-template-columns:minmax(0,340px);justify-content:center;gap:14px;transition:grid-template-columns .3s}
+.proj.open .proj-vids{grid-template-columns:repeat(3,1fr);justify-content:stretch}
+@media(max-width:720px){.proj.open .proj-vids{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.proj.open .proj-vids{grid-template-columns:1fr}}
 .proj-vids .vid{aspect-ratio:9/16}
+.proj-extra{display:none}
+.proj.open .proj-extra{display:block;animation:projUp .4s ease both}
+@keyframes projUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.proj-more{text-align:center}
+.proj-toggle{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:var(--body);font-weight:600;
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:transparent;
+  border:1px solid var(--edge);padding:12px 28px;border-radius:2px;cursor:pointer;transition:all .2s}
+.proj-toggle:hover{border-color:var(--orange);color:var(--orange)}
 .proj-tag{position:absolute;top:12px;left:12px;z-index:4;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:#0a0a0a;background:var(--orange);padding:4px 9px;border-radius:4px;font-weight:700;transition:opacity .3s}
 .vid.playing .proj-tag{opacity:0}
@@ -276,10 +285,10 @@ h1 .odot{display:inline-block;width:.15em;height:.15em;border-radius:50%;backgro
   </div>
 
   <!-- PROYECTO DESTACADO: NG REALTORS (con puntuación de encuesta) -->
-  <div class="proj">
+  <div class="proj" id="projNG">
     <div class="proj-head">
       <div>
-        <span class="vcat">Proyecto · Cliente</span>
+        <span class="vcat">Satisfacción del cliente</span>
         <div class="proj-name">NG Realtors</div>
       </div>
       <div class="proj-rate">
@@ -294,17 +303,18 @@ h1 .odot{display:inline-block;width:.15em;height:.15em;border-radius:50%;backgro
         <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="vmeta"><span class="vcat">NG Realtors</span></div>
       </div>
-      <div class="vid v" data-id="8rO8gKjLXSk">
+      <div class="vid v proj-extra" data-id="8rO8gKjLXSk">
         <img class="vthumb" src="https://i.ytimg.com/vi/8rO8gKjLXSk/oardefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/8rO8gKjLXSk/hqdefault.jpg'" alt="" loading="lazy">
         <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="vmeta"><span class="vcat">NG Realtors</span></div>
       </div>
-      <div class="vid v" data-id="d0WAVG_X3xc">
+      <div class="vid v proj-extra" data-id="d0WAVG_X3xc">
         <img class="vthumb" src="https://i.ytimg.com/vi/d0WAVG_X3xc/oardefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/d0WAVG_X3xc/hqdefault.jpg'" alt="" loading="lazy">
         <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="vmeta"><span class="vcat">NG Realtors</span></div>
       </div>
     </div>
+    <div class="proj-more"><button class="proj-toggle" id="projToggle" type="button">Ver los 3 videos ▾</button></div>
   </div>
 
   <div class="subhead">Reels · contenido para redes</div>
@@ -462,6 +472,11 @@ document.querySelectorAll('.vid').forEach(v=>{
 // reveal on scroll
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.2});
 document.querySelectorAll('.reveal-up').forEach(el=>io.observe(el));
+</script>
+<script>
+(function(){var p=document.getElementById('projNG'),b=document.getElementById('projToggle');
+if(p&&b){b.addEventListener('click',function(){var o=p.classList.toggle('open');
+b.textContent=o?'Ver menos ▴':'Ver los 3 videos ▾';});}})();
 </script>
 </body>
 </html>
