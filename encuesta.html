@@ -214,10 +214,12 @@ screens.push(()=>{
     <h1 class="wm">GOVA</h1>
     <p class="sub">Terminamos tu proyecto y queremos hacerlo cada vez mejor. Son 30 segundos — tu opinión nos ayuda muchísimo. 🎬</p>
     ${whoLine}
-    ${data.cliente ? '' : '<input class="txt" id="nombre" placeholder="Tu nombre (opcional)" autocomplete="name">'}
+    ${data.cliente ? '' : '<input class="txt" id="nombre" placeholder="Tu nombre" autocomplete="name" required>'}
     <div><button class="btn solid" id="go">Empezar &nbsp;→</button></div>`;
   el.querySelector('#go').onclick=()=>{
-    const n=el.querySelector('#nombre'); if(n&&n.value.trim())data.cliente=n.value.trim();
+    const n=el.querySelector('#nombre');
+    if(n && !n.value.trim()){ n.style.borderColor='var(--orange)'; n.placeholder='Escribe tu nombre para empezar'; n.focus(); return; }
+    if(n)data.cliente=n.value.trim();
     next();
   };
   return el;
@@ -261,26 +263,30 @@ screens.push(()=>{
 // 5 — testimonio
 screens.push(()=>{
   const el=document.createElement('div'); el.className='screen';
-  el.innerHTML=`<div class="qnum">05</div><h2>¿Nos autorizas a<br>compartir tu opinión?</h2>
-    <p class="sub">Nos encantaría usar tu comentario como testimonio en nuestras redes.</p>
+  el.innerHTML=`<div class="qnum">05</div><h2>Déjanos tu opinión<br>en unas palabras</h2>
+    <p class="sub">Un comentario tuyo vale oro 🧡 — nos ayuda a crecer y, con tu permiso, lo compartimos como testimonio en nuestras redes. ¿Nos autorizas?</p>
     <div class="choices">
       <div class="chip" data-v="1">Sí, con gusto</div>
       <div class="chip" data-v="0">Prefiero que no</div>
     </div>
-    <div class="field" id="tfield" style="display:none"><textarea id="test" placeholder="Déjanos unas palabras (opcional)"></textarea></div>
+    <div class="field" id="tfield" style="display:none"><textarea id="test" placeholder="Cuéntanos qué fue lo que más te gustó..."></textarea></div>
+    <p class="hint" id="testhint" style="display:none">Con unas pocas palabras basta — significa muchísimo para nosotros.</p>
     <div class="btnrow"><button class="btn solid" id="fin" disabled>Enviar &nbsp;✓</button></div>`;
-  const chips=el.querySelectorAll('.chip'), fin=el.querySelector('#fin'), tf=el.querySelector('#tfield');
+  const chips=el.querySelectorAll('.chip'), fin=el.querySelector('#fin'), tf=el.querySelector('#tfield'), th=el.querySelector('#testhint');
   chips.forEach(c=>c.onclick=()=>{
     chips.forEach(x=>x.classList.remove('sel'));c.classList.add('sel');
     data.testimonio_ok=c.dataset.v==='1';
     tf.style.display=data.testimonio_ok?'block':'none';
+    th.style.display=data.testimonio_ok?'block':'none';
     fin.removeAttribute('disabled');
+    if(data.testimonio_ok) setTimeout(()=>{const t=el.querySelector('#test');if(t)t.focus();},250);
   });
   fin.onclick=()=>{const t=el.querySelector('#test');if(t)data.testimonio=t.value.trim();submit();};
   // restaurar si ya había elegido (al volver atrás)
   if(data.testimonio_ok!==null){
     const sel=el.querySelector('.chip[data-v="'+(data.testimonio_ok?'1':'0')+'"]'); if(sel)sel.classList.add('sel');
     tf.style.display=data.testimonio_ok?'block':'none';
+    th.style.display=data.testimonio_ok?'block':'none';
     el.querySelector('#test').value=data.testimonio||'';
     fin.removeAttribute('disabled');
   }
